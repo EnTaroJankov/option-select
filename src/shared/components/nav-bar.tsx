@@ -28,7 +28,6 @@ export default function ButtonAppBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onClickLogin = () => {
-    console.log("Clicked")
     setIsLoggedIn(true)
   }
 
@@ -43,7 +42,7 @@ export default function ButtonAppBar() {
             News
           </Typography>
           {
-            !isLoggedIn ? (<Button color="inherit">Login</Button>) : null
+            !isLoggedIn ? (<Button color="inherit" onClick={onClickLogin}>Login</Button>) : null
           }
         </Toolbar>
       </AppBar>
