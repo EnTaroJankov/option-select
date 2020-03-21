@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { StateT } from "../redux/reducers";
-import { loginStart } from "../redux/actions/auth";
+import { loginRequest } from "../redux/actions/auth";
 
 interface ComponentPropsT {
   username: string;
@@ -81,7 +81,7 @@ const mapStateToProps = (state: StateT) => {
 const mapDispatchToProps = (dispatch: (action: any) => void) => {
   return {
     doLogin: (username: string, password: string) => {
-      dispatch(loginStart(username, password));
+      dispatch(loginRequest(username, password));
     }
   };
 };
