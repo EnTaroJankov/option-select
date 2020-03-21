@@ -1,3 +1,5 @@
+import { Dispatch } from "redux";
+
 export const LOGIN_START = "LOGIN_START";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
@@ -44,3 +46,19 @@ export const loginFail: (username: string) => Action<UsernamePayload> = (
     username
   }
 });
+
+export const loginRequest: (
+  username: string,
+  password: string
+) => (dispatch: Dispatch) => Promise<void> = (
+  username: string,
+  password: string
+) => dispatch => {
+  return Promise.resolve(true) // TODO: send API request for login
+    .then(__ => {
+      dispatch(loginSuccess(username));
+    })
+    .catch(__ => {
+      dispatch(loginFail(username));
+    });
+};
