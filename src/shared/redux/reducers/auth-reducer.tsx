@@ -7,30 +7,33 @@ import {
 
 export interface AuthStateT {
   username: string;
+  isLoggingIn: boolean;
   authFailed: boolean;
 }
 
 const defaultState = {
   username: null,
+  isLoggingIn: false,
   authFailed: false
 };
 
 export default function authReducer(state = defaultState, action: Action<any>) {
   switch (action.type) {
     case LOGIN_START:
-      // TODO: perform backend call to authenticate and dispatch login success / failure action
       return {
-        username: action.payload.username,
-        authFailed: false
+        ...state,
+        isLoggingIn: true
       };
     case LOGIN_SUCCESS:
       return {
         username: action.payload.username,
+        isLoggingIn: false,
         authFailed: false
       };
     case LOGIN_FAIL:
       return {
         username: null,
+        isLoggingIn: false,
         authFailed: true
       };
   }

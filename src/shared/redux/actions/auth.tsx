@@ -9,24 +9,13 @@ export interface Action<Payload> {
   readonly payload: Payload;
 }
 
-export interface LoginStartPayload {
-  readonly username: string;
-  readonly password: string;
-}
-
 export interface UsernamePayload {
   readonly username: string;
 }
 
-export const loginStart: (
-  username: string,
-  password: string
-) => Action<LoginStartPayload> = (username: string, password: string) => ({
+export const loginStart: () => Action<null> = () => ({
   type: LOGIN_START,
-  payload: {
-    username,
-    password
-  }
+  payload: null
 });
 
 export const loginSuccess: (username: string) => Action<UsernamePayload> = (
@@ -38,13 +27,9 @@ export const loginSuccess: (username: string) => Action<UsernamePayload> = (
   }
 });
 
-export const loginFail: (username: string) => Action<UsernamePayload> = (
-  username: string
-) => ({
+export const loginFail: () => Action<null> = () => ({
   type: LOGIN_FAIL,
-  payload: {
-    username
-  }
+  payload: null
 });
 
 export const loginRequest: (
@@ -54,11 +39,12 @@ export const loginRequest: (
   username: string,
   password: string
 ) => dispatch => {
+  dispatch(loginStart());
   return Promise.resolve(true) // TODO: send API request for login
     .then(__ => {
       dispatch(loginSuccess(username));
     })
     .catch(__ => {
-      dispatch(loginFail(username));
+      dispatch(loginFail());
     });
 };
