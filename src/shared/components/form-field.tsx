@@ -5,7 +5,8 @@ import { TextFieldProps } from "@material-ui/core/TextField/TextField";
 
 export const LoginField: React.FC<FieldProps & TextFieldProps> = ({
   placeholder,
+  label,
   field
 }) => {
-  return <TextField placeholder={placeholder} {...field} />;
+  return <TextField placeholder={placeholder} label={label} {...field} />;
 };

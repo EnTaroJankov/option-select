@@ -25,18 +25,22 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
           <div>
             <Field
               name="username"
-              placeholder="Username"
+              placeholder="Username..."
+              label="Username"
               component={LoginField}
             />
           </div>
           <div>
             <Field
               name="password"
-              placeholder="Password"
+              placeholder="Password..."
+              label="Password"
               component={LoginField}
             />
           </div>
-          <Button type="submit">Login</Button>
+          <Button type="submit" fullWidth>
+            Login
+          </Button>
         </Form>
       )}
     </Formik>
