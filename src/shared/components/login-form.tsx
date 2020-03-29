@@ -1,6 +1,7 @@
-import { Button, TextField } from "@material-ui/core";
-import { Form, Formik } from "formik";
+import { Button } from "@material-ui/core";
+import { Field, Form, Formik } from "formik";
 import * as React from "react";
+import { LoginField } from "./form-field";
 
 interface Credentials {
   username: string;
@@ -22,10 +23,18 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
       {({ values }) => (
         <Form>
           <div>
-            <TextField name="username" placeholder="Username" />
+            <Field
+              name="username"
+              placeholder="Username"
+              component={LoginField}
+            />
           </div>
           <div>
-            <TextField name="password" placeholder="Password" />
+            <Field
+              name="password"
+              placeholder="Password"
+              component={LoginField}
+            />
           </div>
           <Button type="submit">Login</Button>
         </Form>

@@ -36,6 +36,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// TODO handle logout
+const logoutButton = () => {
+  const handleLogout = () => {
+    console.log("Logging out...");
+  };
+  return (
+    <Button onClick={handleLogout} variant="contained" color="primary">
+      Logout
+    </Button>
+  );
+};
+
 function ButtonAppBar(props: ComponentPropsT) {
   const classes = useStyles();
 
@@ -47,21 +59,50 @@ function ButtonAppBar(props: ComponentPropsT) {
     null
   );
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const loginPopover = () => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+    const open = Boolean(anchorEl);
+    const id = open ? "simple-popover" : undefined;
+    return (
+      <>
+        <Button
+          aria-describedby={id}
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+        >
+          Login
+        </Button>
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center"
+          }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <LoginForm
+              onSubmit={({ username, password }) => {
+                doLogin(username, password);
+              }}
+            />
+          </div>
+        </Popover>
+      </>
+    );
   };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  // TODO handle logout
-  const handleLogout = () => {
-    console.log({ username });
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   return (
     <div className={classes.root}>
@@ -78,40 +119,7 @@ function ButtonAppBar(props: ComponentPropsT) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          <Button
-            aria-describedby={id}
-            variant="contained"
-            color="primary"
-            onClick={handleClick}
-          >
-            Account
-          </Button>
-          <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center"
-            }}
-          >
-            {isLoggedIn ? (
-              <Button onClick={handleLogout}>Logout</Button>
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                <LoginForm
-                  onSubmit={({ username, password }) => {
-                    doLogin(username, password);
-                  }}
-                />
-              </div>
-            )}
-          </Popover>
+          {isLoggedIn ? logoutButton() : loginPopover()}
         </Toolbar>
       </AppBar>
     </div>
