@@ -1,15 +1,16 @@
-import React from "react";
-
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Button, Popover } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import { connect } from "react-redux";
+import IconButton from "@material-ui/core/IconButton";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import { StateT } from "../redux/reducers";
+import React from "react";
+import { connect } from "react-redux";
+
 import { loginRequest } from "../redux/actions/auth";
+import { StateT } from "../redux/reducers";
+import { LoginForm } from "./LoginForm";
 
 interface ComponentPropsT {
   username: string;
@@ -42,9 +43,25 @@ function ButtonAppBar(props: ComponentPropsT) {
 
   const isLoggedIn = username !== null;
 
-  const onClickLogin = () => {
-    doLogin("username", "password");
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
   };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  // TODO handle logout
+  const handleLogout = () => {
+    console.log({ username });
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <div className={classes.root}>
@@ -61,11 +78,40 @@ function ButtonAppBar(props: ComponentPropsT) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          {!isLoggedIn ? (
-            <Button color="inherit" onClick={onClickLogin}>
-              Login
-            </Button>
-          ) : null}
+          <Button
+            aria-describedby={id}
+            variant="contained"
+            color="primary"
+            onClick={handleClick}
+          >
+            Account
+          </Button>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center"
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center"
+            }}
+          >
+            {isLoggedIn ? (
+              <Button onClick={handleLogout}>Logout</Button>
+            ) : (
+              <div style={{ textAlign: "center" }}>
+                <LoginForm
+                  onSubmit={({ username, password }) => {
+                    doLogin(username, password);
+                  }}
+                />
+              </div>
+            )}
+          </Popover>
         </Toolbar>
       </AppBar>
     </div>
