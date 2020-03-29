@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 
 import { loginRequest } from "../redux/actions/auth";
 import { StateT } from "../redux/reducers";
-import { LoginForm } from "./LoginForm";
+import { LoginForm } from "./login-form";
 
 interface ComponentPropsT {
   username: string;
