@@ -1,9 +1,5 @@
-import {
-  LOGIN_START,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  Action
-} from "../actions/auth";
+import { Action } from "../actions/auth";
+import { LOGIN_START, LOGIN_SUCCESS, LOGIN_FAIL } from "../constants/constants";
 
 export interface AuthStateT {
   username: string;

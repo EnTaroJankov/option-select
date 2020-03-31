@@ -1,8 +1,12 @@
 import { Dispatch } from "redux";
-
-export const LOGIN_START = "LOGIN_START";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAIL = "LOGIN_FAIL";
+import {
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGGING_OUT,
+  LOGOUT_FAILED,
+  LOGOUT_SUCESS
+} from "../constants/constants";
 
 export interface Action<Payload> {
   readonly type: string;
@@ -11,6 +15,10 @@ export interface Action<Payload> {
 
 export interface UsernamePayload {
   readonly username: string;
+}
+
+export interface ErrorPayLoad {
+  readonly error: string;
 }
 
 export const loginStart: () => Action<null> = () => ({
@@ -30,6 +38,25 @@ export const loginSuccess: (username: string) => Action<UsernamePayload> = (
 export const loginFail: () => Action<null> = () => ({
   type: LOGIN_FAIL,
   payload: null
+});
+
+export const logoutStart: () => Action<null> = () => ({
+  type: LOGGING_OUT,
+  payload: null
+});
+
+export const logoutSuceed: () => Action<null> = () => ({
+  type: LOGOUT_SUCESS,
+  payload: null
+});
+
+export const logoutFailed: (error: string) => Action<ErrorPayLoad> = (
+  error: string
+) => ({
+  type: LOGOUT_FAILED,
+  payload: {
+    error
+  }
 });
 
 export const loginRequest: (
