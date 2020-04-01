@@ -9,20 +9,23 @@ import {
 } from "../constants/constants";
 
 export interface AuthStateT {
-  username: string;
+  username: string | null;
   isLoggingIn: boolean;
   authFailed: boolean;
   isLoggingOut: boolean;
 }
 
-const defaultState = {
+const defaultState: AuthStateT = {
   username: null,
   isLoggingIn: false,
   authFailed: false,
   isLoggingOut: false
 };
 
-export default function authReducer(state = defaultState, action: Action<any>) {
+export default function authReducer(
+  state: AuthStateT = defaultState,
+  action: Action<any>
+): AuthStateT {
   switch (action.type) {
     case LOGIN_START:
       return {
@@ -51,7 +54,7 @@ export default function authReducer(state = defaultState, action: Action<any>) {
     case LOGOUT_SUCCESS:
       return {
         username: null,
-        isLogginIn: false,
+        isLoggingIn: false,
         authFailed: false,
         isLoggingOut: false
       };
