@@ -1,24 +1,18 @@
-import React from "react";
-
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import { connect } from "react-redux";
+import IconButton from "@material-ui/core/IconButton";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import { connect } from "react-redux";
+
 import { StateT } from "../redux/reducers";
-import { loginRequest } from "../redux/actions/auth";
+import LoginButtonAndPopover from "./login/login-popover";
+import LogoutButton from "./login/logout-button";
 
 interface ComponentPropsT {
   username: string;
-  doLogin: (username: string, password: string) => void;
-  //loginError: string,
-}
-
-export interface ContainerPropsT {
-  // no props
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,13 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
 function ButtonAppBar(props: ComponentPropsT) {
   const classes = useStyles();
 
-  const { username, doLogin } = props;
+  const { username } = props;
 
   const isLoggedIn = username !== null;
-
-  const onClickLogin = () => {
-    doLogin("username", "password");
-  };
 
   return (
     <div className={classes.root}>
@@ -61,11 +51,7 @@ function ButtonAppBar(props: ComponentPropsT) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          {!isLoggedIn ? (
-            <Button color="inherit" onClick={onClickLogin}>
-              Login
-            </Button>
-          ) : null}
+          {isLoggedIn ? <LogoutButton /> : <LoginButtonAndPopover />}
         </Toolbar>
       </AppBar>
     </div>
@@ -78,12 +64,4 @@ const mapStateToProps = (state: StateT) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: any) => void) => {
-  return {
-    doLogin: (username: string, password: string) => {
-      dispatch(loginRequest(username, password));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar);
+export default connect(mapStateToProps)(ButtonAppBar);
