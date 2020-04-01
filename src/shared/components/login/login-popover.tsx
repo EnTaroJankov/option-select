@@ -1,18 +1,9 @@
 import { Button, Popover } from "@material-ui/core";
 import React from "react";
-import { connect } from "react-redux";
 
-import { loginRequest } from "../../redux/actions/auth";
-import { StateT } from "../../redux/reducers";
-import { LoginForm } from "../form/login-form";
+import LoginForm from "./login-form";
 
-interface ComponentPropsT {
-  doLogin: (username: string, password: string) => void;
-}
-
-function LoginButtonAndPopover(props: ComponentPropsT) {
-  const { doLogin } = props;
-
+function LoginButtonAndPopover() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -53,32 +44,11 @@ function LoginButtonAndPopover(props: ComponentPropsT) {
         }}
       >
         <div style={{ textAlign: "center" }}>
-          <LoginForm
-            onSubmit={({ username, password }) => {
-              doLogin(username, password);
-            }}
-          />
+          <LoginForm />
         </div>
       </Popover>
     </>
   );
 }
 
-const mapStateToProps = (state: StateT) => {
-  return {
-    username: state.auth.username
-  };
-};
-
-const mapDispatchToProps = (dispatch: (action: any) => void) => {
-  return {
-    doLogin: (username: string, password: string) => {
-      dispatch(loginRequest(username, password));
-    }
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginButtonAndPopover);
+export default LoginButtonAndPopover;

@@ -1,23 +1,22 @@
 import { Button } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 import * as React from "react";
-import { LoginField } from "./form-field";
+import { connect } from "react-redux";
 
-interface Credentials {
-  username: string;
-  password: string;
-}
+import { loginRequest } from "../../redux/actions/auth";
+import { StateT } from "../../redux/reducers";
+import { LoginField } from "../form/text-field";
 
 interface Props {
-  onSubmit: (credentials: Credentials) => void;
+  onSubmit: (username: string, password: string) => void;
 }
 
-export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
+const LoginForm: React.FC<Props> = ({ onSubmit }) => {
   return (
     <Formik
       initialValues={{ username: "", password: "" }}
       onSubmit={values => {
-        onSubmit(values);
+        onSubmit(values.username, values.password);
       }}
     >
       {({ values }) => (
@@ -46,3 +45,19 @@ export const LoginForm: React.FC<Props> = ({ onSubmit }) => {
     </Formik>
   );
 };
+
+const mapStateToProps = (state: StateT) => {
+  return {
+    username: state.auth.username
+  };
+};
+
+const mapDispatchToProps = (dispatch: (action: any) => void) => {
+  return {
+    onSubmit: (username: string, password: string) => {
+      dispatch(loginRequest(username, password));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
