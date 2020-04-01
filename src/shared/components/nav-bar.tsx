@@ -7,14 +7,12 @@ import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { connect } from "react-redux";
 
-import { loginRequest } from "../redux/actions/auth";
 import { StateT } from "../redux/reducers";
 import LoginButtonAndPopover from "./login/login-popover";
 import LogoutButton from "./login/logout-button";
 
 interface ComponentPropsT {
   username: string;
-  doLogin: (username: string, password: string) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function ButtonAppBar(props: ComponentPropsT) {
   const classes = useStyles();
 
-  const { username, doLogin } = props;
+  const { username } = props;
 
   const isLoggedIn = username !== null;
 
@@ -53,11 +51,7 @@ function ButtonAppBar(props: ComponentPropsT) {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          {isLoggedIn ? (
-            <LogoutButton />
-          ) : (
-            <LoginButtonAndPopover doLogin={doLogin} />
-          )}
+          {isLoggedIn ? <LogoutButton /> : <LoginButtonAndPopover />}
         </Toolbar>
       </AppBar>
     </div>
@@ -70,12 +64,4 @@ const mapStateToProps = (state: StateT) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: (action: any) => void) => {
-  return {
-    doLogin: (username: string, password: string) => {
-      dispatch(loginRequest(username, password));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar);
+export default connect(mapStateToProps)(ButtonAppBar);

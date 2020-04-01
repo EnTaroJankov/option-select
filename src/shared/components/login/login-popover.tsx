@@ -1,6 +1,9 @@
 import { Button, Popover } from "@material-ui/core";
 import React from "react";
+import { connect } from "react-redux";
 
+import { loginRequest } from "../../redux/actions/auth";
+import { StateT } from "../../redux/reducers";
 import { LoginForm } from "../form/login-form";
 
 interface ComponentPropsT {
@@ -61,4 +64,21 @@ function LoginButtonAndPopover(props: ComponentPropsT) {
   );
 }
 
-export default LoginButtonAndPopover;
+const mapStateToProps = (state: StateT) => {
+  return {
+    username: state.auth.username
+  };
+};
+
+const mapDispatchToProps = (dispatch: (action: any) => void) => {
+  return {
+    doLogin: (username: string, password: string) => {
+      dispatch(loginRequest(username, password));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginButtonAndPopover);
