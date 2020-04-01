@@ -3,9 +3,9 @@ import {
   LOGIN_START,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGGING_OUT,
   LOGOUT_FAILED,
-  LOGOUT_SUCESS
+  LOGOUT_START,
+  LOGOUT_SUCCESS
 } from "../constants/constants";
 
 export interface Action<Payload> {
@@ -41,12 +41,12 @@ export const loginFail: () => Action<null> = () => ({
 });
 
 export const logoutStart: () => Action<null> = () => ({
-  type: LOGGING_OUT,
+  type: LOGOUT_START,
   payload: null
 });
 
-export const logoutSuceed: () => Action<null> = () => ({
-  type: LOGOUT_SUCESS,
+export const logoutSuccess: () => Action<null> = () => ({
+  type: LOGOUT_SUCCESS,
   payload: null
 });
 
@@ -67,11 +67,26 @@ export const loginRequest: (
   password: string
 ) => dispatch => {
   dispatch(loginStart());
-  return Promise.resolve(true) // TODO: send API request for login
+  return new Promise(function(resolve) {
+    setTimeout(resolve.bind(null, true), 500);
+  })
     .then(__ => {
       dispatch(loginSuccess(username));
     })
     .catch(__ => {
       dispatch(loginFail());
+    });
+};
+
+export const logoutRequest: () => (
+  dispatch: Dispatch
+) => Promise<void> = () => dispatch => {
+  dispatch(logoutStart());
+  return Promise.resolve(true) // TODO: send API request for login
+    .then(__ => {
+      dispatch(logoutSuccess());
+    })
+    .catch(__ => {
+      dispatch(logoutFailed("network connectivity error"));
     });
 };
