@@ -12,7 +12,7 @@ import LoginButtonAndPopover from "./login/login-popover";
 import LogoutButton from "./login/logout-button";
 
 interface ComponentPropsT {
-  username: string;
+  username: string | null;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
