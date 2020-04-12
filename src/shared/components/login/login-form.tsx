@@ -4,14 +4,15 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 import { loginRequest } from "../../redux/actions/auth";
-import { StateT } from "../../redux/reducers";
 import { LoginField } from "../form/text-field";
+import { StateT } from "../../redux/reducers";
 
 interface Props {
   onSubmit: (username: string, password: string) => void;
+  isLoggingIn: boolean;
 }
 
-const LoginForm: React.FC<Props> = ({ onSubmit }) => {
+const LoginForm: React.FC<Props> = ({ onSubmit, isLoggingIn }) => {
   return (
     <Formik
       initialValues={{ username: "", password: "" }}
@@ -37,7 +38,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
               component={LoginField}
             />
           </div>
-          <Button type="submit" fullWidth>
+          <Button type="submit" disabled={isLoggingIn} fullWidth>
             Login
           </Button>
         </Form>
@@ -46,17 +47,17 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
   );
 };
 
-const mapStateToProps = (state: StateT) => {
-  return {
-    username: state.auth.username
-  };
-};
-
 const mapDispatchToProps = (dispatch: (action: any) => void) => {
   return {
     onSubmit: (username: string, password: string) => {
       dispatch(loginRequest(username, password));
     }
+  };
+};
+
+const mapStateToProps = (state: StateT) => {
+  return {
+    isLoggingIn: state.auth.isLoggingIn
   };
 };
 
