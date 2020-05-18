@@ -1,7 +1,5 @@
 import minBy from "lodash.minby";
 
-import { MouseEvent } from "react";
-
 export const pixelsToCoords = (chart: any, [pX, pY]: [number, number]) => {
   const { top: yTop, bottom: yBottom } = chart.chartArea;
   const { max: yMax } = chart.scales["y-axis-1"];
@@ -30,7 +28,7 @@ export const nearestPoint = (
     minBy(
       points.map(({ x: xi, y: yi }, idx) => [
         idx,
-        pixelDistance(chart, [xi, yi], [x, y])
+        pixelQuadrance(chart, [xi, yi], point)
       ]),
       ([_, pDist]) => pDist
     ) || [-1, -1]
@@ -47,7 +45,7 @@ export const pixelScales = (chart: any): [number, number] => {
   return [(xMax - xMin) / (xRight - xLeft), (yMax - yMin) / (yBottom - yTop)];
 };
 
-export const pixelDistance = (
+export const pixelQuadrance = (
   chart: any,
   [x1, y1]: [number, number],
   [x2, y2]: [number, number]
@@ -56,12 +54,4 @@ export const pixelDistance = (
   const [xScale, yScale] = pixelScales(chart);
   const [dpx, dpy] = [dx / xScale, dy / yScale];
   return dpx * dpx + dpy * dpy;
-};
-
-export const distance = (
-  [x1, y1]: [number, number],
-  [x2, y2]: [number, number]
-): number => {
-  const [dx, dy] = [x2 - x1, y2 - y1];
-  return dx * dx + dy * dy;
 };

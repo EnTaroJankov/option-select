@@ -1,6 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
-
-import { usePrevious } from "../../hooks/use-previous";
+import React, { useMemo, useRef } from "react";
 
 import ScatterChart from "../chartjs/plot";
 
@@ -37,64 +35,6 @@ export default (props: Props) => {
   });
 
   const data = useMemo(() => clonedeep(dataRef.current), [dataRef.current]);
-
-  const getYAxisBoundsForCurve = (dataIndex: number) => {
-    const ys = data.datasets[dataIndex].data.map(point => point.y);
-    const minY = min(ys);
-    const maxY = max(ys);
-    const range = maxY - minY;
-    return [
-      max([0, minY - 0.1 * range]),
-      maxY + max([0.1 * range, 0.05])
-    ] as Array<number>;
-  };
-
-  const getYAxisBoundsForAllCurves = () => {
-    const [mins, maxs] = unzip(
-      range(data.datasets.length).map(getYAxisBoundsForCurve)
-    );
-    return [min(mins), max(maxs)] as Array<number>;
-  };
-
-  // const [options, setOptions] = useState(() => {
-  //   const [minY, maxY] = getYAxisBoundsForAllCurves()
-  //   return {
-  //     dragData: true,
-  //     onDragEnd: (_, dataSetIndex: number, index: number, value: number) => {
-  //       console.log(JSON.stringify(value))
-  //       recomputeGraphOptions()
-  //       onChangeData && onChangeData(dataSetIndex, index, value)
-  //     },
-  //     legend: {
-  //       onClick: e => e.stopPropagation()
-  //     },
-  //     scales: {
-  //       yAxes: [{
-  //         display: true,
-  //         ticks: {
-  //           suggestedMin: minY,
-  //           suggestedMax: maxY
-  //         }
-  //       }]
-  //     }
-  //   }
-  // });
-
-  // const recomputeGraphOptions = () => {
-  //   const [minY, maxY] = getYAxisBoundsForAllCurves()
-  //   setOptions({
-  //     ...options,
-  //     scales: {
-  //       yAxes: [{
-  //         display: true,
-  //         ticks: {
-  //           suggestedMin: minY, //min
-  //           suggestedMax: maxY  //max
-  //         }
-  //       }]
-  //     }
-  //   })
-  // }
 
   return (
     <ScatterChart

@@ -24,21 +24,12 @@ interface DragOptionsT {
 }
 
 export default (props: PropsT) => {
-  const {
-    data,
-    options,
-    dragOptions,
-    interactive,
-    onDoubleClickCoords,
-    externalRefresh
-  } = props;
+  const { data, options, dragOptions, interactive, externalRefresh } = props;
 
   const [internalRefresh, setInternalRefresh] = useState(false);
 
   const refreshSwitch =
-    usePrevious(false) != (externalRefresh || internalRefresh);
-
-  console.log("RefreshSwitch: " + refreshSwitch);
+    usePrevious(false) !== (externalRefresh || internalRefresh);
 
   const canvasRef = useRef(null);
   const chartRef = useRef<Chart | null>(null);
@@ -65,7 +56,6 @@ export default (props: PropsT) => {
   }, [data, refreshSwitch]);
 
   useEffect(() => {
-    console.log("Using effect");
     if (!canvasRef.current) {
       return;
     }
@@ -75,7 +65,7 @@ export default (props: PropsT) => {
     if (!chartRef.current) {
       chartRef.current = new Chart(ctx, {
         type: "scatter",
-        data,
+        data: modifiedData,
         options: fullOptions
       });
     } else {
@@ -89,7 +79,7 @@ export default (props: PropsT) => {
     if (internalRefresh) {
       setInternalRefresh(false);
     }
-  });
+  }, [refreshSwitch]);
 
   // cleanup by destroying chart
   useEffect(
@@ -106,14 +96,14 @@ export default (props: PropsT) => {
         e.nativeEvent.offsetY
       ]);
       const points = ((data.datasets || [])[0] || {}).data || [];
-      const [nearestIndex, nearestPDistance] = nearestPoint(
+      const [nearestIndex, nearestPQuadrance] = nearestPoint(
         chartRef.current,
         { x, y },
         points as Array<{ x: number; y: number }>
       );
-      console.log("nearest " + [nearestIndex, nearestPDistance]);
-      if (nearestIndex >= 0 && nearestPDistance < 5) {
+      if (nearestIndex >= 0 && nearestPQuadrance < 20.25) {
         points.splice(nearestIndex, 1);
+        setInternalRefresh(true);
       }
     }
   };
