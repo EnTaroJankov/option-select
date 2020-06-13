@@ -27,10 +27,19 @@ interface DragOptionsT {
 export default (props: PropsT) => {
   const { data, options, dragOptions, interactive, externalRefresh } = props;
 
+  console.log("Scatterplot rerender");
+  console.log(data);
+
   const [internalRefresh, setInternalRefresh] = useState(false);
 
-  const refreshSwitch =
-    usePrevious(false) !== (externalRefresh || internalRefresh);
+  // const {refreshSwitch, setRefreshSwitch} = useState(true); // TODO: fix refresh
+
+  const previous = usePrevious(false);
+
+  // const refreshSwitch =
+  //  previous !== (externalRefresh || internalRefresh); // TODO: fix refresh
+
+  // console.log(refreshSwitch, previous); // TODO: fix refresh
 
   const canvasRef = useRef(null);
   const chartRef = useRef<Chart | null>(null);
@@ -47,7 +56,7 @@ export default (props: PropsT) => {
       ...(interactive ? childDragOptions : {}),
       dragData: interactive
     }),
-    [options, childDragOptions, interactive, refreshSwitch]
+    [options, childDragOptions, interactive]
   );
 
   const modifiedData = useMemo(() => {
@@ -60,7 +69,7 @@ export default (props: PropsT) => {
       }),
       ...data
     };
-  }, [data, refreshSwitch]);
+  }, [data]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -83,10 +92,10 @@ export default (props: PropsT) => {
     }
     chartRef.current.update();
 
-    if (internalRefresh) {
-      setInternalRefresh(false);
-    }
-  }, [refreshSwitch]);
+    //if (internalRefresh) {
+    //  setInternalRefresh(false);
+    //}
+  });
 
   // cleanup by destroying chart
   useEffect(
@@ -112,7 +121,7 @@ export default (props: PropsT) => {
         points.splice(nearestIndex, 1);
         props.onDataModify &&
           props.onDataModify(chartRef.current.data.datasets);
-        setInternalRefresh(true);
+        // setInternalRefresh(true); TODO: fix refresh logic
       }
     }
   };
