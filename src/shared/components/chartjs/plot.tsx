@@ -11,6 +11,7 @@ interface PropsT {
   dragOptions: DragOptionsT;
   interactive: boolean;
   onDoubleClickCoords?: (x: Number, y: Number) => void;
+  onDataModify?: (data: any) => void;
 }
 
 interface DragOptionsT {
@@ -34,13 +35,19 @@ export default (props: PropsT) => {
   const canvasRef = useRef(null);
   const chartRef = useRef<Chart | null>(null);
 
+  const childDragOptions = {
+    onDragEnd: (e, datasetIndex, index, value) => {
+      props.onDataModify && props.onDataModify(chartRef.current?.data.datasets);
+    }
+  };
+
   const fullOptions = useMemo(
     () => ({
       ...options,
-      ...(interactive ? dragOptions : {}),
+      ...(interactive ? childDragOptions : {}),
       dragData: interactive
     }),
-    [options, dragOptions, interactive, refreshSwitch]
+    [options, childDragOptions, interactive, refreshSwitch]
   );
 
   const modifiedData = useMemo(() => {
@@ -103,6 +110,8 @@ export default (props: PropsT) => {
       );
       if (nearestIndex >= 0 && nearestPQuadrance < 20.25) {
         points.splice(nearestIndex, 1);
+        props.onDataModify &&
+          props.onDataModify(chartRef.current.data.datasets);
         setInternalRefresh(true);
       }
     }

@@ -10,6 +10,8 @@ import unzip from "lodash.unzip";
 
 interface Props {
   onShiftData?: (datasetIndex: number, index: number, value: number) => void;
+  onDataModify?: (data: any) => void;
+  data: any;
 }
 
 export default (props: Props) => {
@@ -42,6 +44,7 @@ export default (props: Props) => {
       options={{}}
       dragOptions={{}}
       interactive={true}
+      onDataModify={props.onDataModify}
     />
   );
 };
